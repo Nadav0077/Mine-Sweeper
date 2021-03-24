@@ -1,0 +1,96 @@
+.board-container .cell {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.5em;
+    background-image: url(../img/ground.png);
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.board-container .cell:hover {
+    filter: brightness(1.5);
+}
+
+.shown {
+    filter: brightness(1.5);
+}
+
+.bomb {
+    height: 35px;
+    width: 35px;
+}
+
+.flag {
+    height: 35px;
+    width: 35px;
+}
+
+@font-face {
+    font-family: "myFont";
+    src: url("../css/fonts/04B_30__.TTF");
+}
+
+body {
+    font-family: myFont;
+    background-image: url('../img/background.gif');
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+div {
+    font-family: "myFont";
+}
+
+.board-container {
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    backdrop-filter: blur(100px);
+}
+
+.button2 {
+    display: inline-block;
+    padding: 0.5em 3em;
+    border: 0.16em solid #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: myFont;
+    color: #FFFFFF;
+    text-align: center;
+    transition: all 0.15s;
+    background-color: transparent;
+}
+
+.button2:hover {
+    color: #DDDDDD;
+    border-color: #DDDDDD;
+}
+
+.button2:active {
+    color: #BBBBBB;
+    border-color: #BBBBBB;
+}
+
+@media all and (max-width:30em) {
+    a.button2 {
+        display: block;
+        margin: 0.4em auto;
+    }
+}
+
+.heart {
+    height: 60px;
+    width: 60px;
+    backdrop-filter: blur(100px);
+}
+
+.restart {
+    font-size: 40px;
+    padding: 0%;
+    margin: 0%;
+}

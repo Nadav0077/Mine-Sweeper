@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+
+<body onload="initGame()">
+    <label class="text">Your Time:</label>
+    <label class="minutes">00</label>
+    <label class="colon">:</label>
+    <label class="seconds">00</label></br>
+    <label class="text">Your Best Time:</label>
+    <label class="bestMinutes">00</label>
+    <label class="colon">:</label>
+    <label class="bestSeconds">00</label></br>
+    </br>
+    </br>
+
+    <div class="hearts"></div>
+    <button class="button2 back" onclick="back()">BACK</button>
+    <button class="button2 restart" onclick="initGame()">&#128512</button>
+    <button class="button2" onclick="changeSize(4)">Easy</button>
+    <button class="button2" onclick="changeSize(8)">Medium</button>
+    <button class="button2" onclick="changeSize(12)">Hard</button>
+    <div class="board-container"></div>
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
