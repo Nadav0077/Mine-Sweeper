@@ -37,14 +37,17 @@ var gBoard = [];
 
 
 function initGame() {
+    clearInterval(gInter)
+    gGame.secsPassed = 0;
+    document.querySelector('.self-mine').classList.remove('shown')
     gIsFirstClick = false;
     gIsSelfMine = false;
     gIsHint = false;
     gGame.isOn = true;
     document.querySelector('.restart').innerHTML = '&#128512';
-    gGame.secsPassed = 0;
+
     gBestTime = -Infinity;
-    countTime();
+
     gGame.markedCount = 0;
     gGame.shownCount = 0;
     gHearts = (gLevel.MINES === 2) ? 2 : 3;
@@ -116,7 +119,7 @@ function renderBoard(board) {
 
 
 function cellClicked(elCell, i, j) {
-    debugger
+    // debugger
     if (gGame.isOn) {
         if (!gIsFirstClick) {
 
@@ -126,16 +129,20 @@ function cellClicked(elCell, i, j) {
                         // console.log(d)
                     gBoard[mine.i][mine.j].isMine = true;
                 }
+                countTime();
                 gIsFirstClick = true;
             } else {
                 if (gSelfMine.amount === gSelfMine.countAdded) {
                     gIsSelfMine = false;
                     gIsFirstClick = true;
+                    countTime();
+                    document.querySelector('.self-mine').classList.remove('shown')
                 } else {
                     if (!gBoard[i][j].isMine) {
                         gBoard[i][j].isMine = true;
                         gSelfMine.countAdded++;
                         document.querySelector('.self-mine-number').innerText = gSelfMine.amount - gSelfMine.countAdded;
+
                     }
                     return;
                 }
@@ -344,12 +351,8 @@ function createHearts() {
     var strHTML = '<table border="0"><tbody>';
     strHTML += '<tr>';
     for (var i = 0; i < gHearts; i++) {
-
         var className = 'cell cell' + i;
         strHTML += '<td class="' + className + '" >' + HEART + '</td>'
-
-
-
     }
     strHTML += '</tr>'
     strHTML += '</tbody></table>';
@@ -371,25 +374,26 @@ function updateHeart(num) {
 }
 
 function back() {
-    // console.log(gGamesArr)
-    // gGamesArr.pop()
-    var lastGame = gGamesArr.pop()
-        // lastGame = lastGame[0];
-        // console.log(lastGame)
-    gBoard = [];
-    gBoard = lastGame.board;
-    gHearts = lastGame.lives;
-    gGame.isOn = lastGame.game.isOn;
-    gGame.shownCount = lastGame.shownCount;
-    gGame.markedCount = lastGame.game.markedCount;
-    // gGame.secsPassed = lastGame.secsPassed;
-    createHearts();
-    renderBoard();
+    if (gGamesArr.length > 0) { // console.log(gGamesArr)
+        // gGamesArr.pop()
+        var lastGame = gGamesArr.pop()
+            // lastGame = lastGame[0];
+            // console.log(lastGame)
+        gBoard = [];
+        gBoard = lastGame.board;
+        gHearts = lastGame.lives;
+        gGame.isOn = lastGame.game.isOn;
+        gGame.shownCount = lastGame.game.shownCount;
+        gGame.markedCount = lastGame.game.markedCount;
+        // gGame.secsPassed = lastGame.secsPassed;
+        createHearts();
+        renderBoard();
+    }
 }
 
 function checkIfWin() {
     // console.log('test')
-    // console.log(gGame.markedCount, gGame.shownCount)
+    console.log(gGame.markedCount, gGame.shownCount)
     if (gGame.markedCount === gLevel.MINES && gGame.shownCount === gLevel.SIZE ** 2 - gLevel.MINES) {
         // console.log('true')
         document.querySelector('.restart').innerHTML = '&#128526';
@@ -541,4 +545,5 @@ function copyMat() {
 
 function addSelfMine() {
     gIsSelfMine = true;
+    document.querySelector('.self-mine').classList.add('shown')
 }
