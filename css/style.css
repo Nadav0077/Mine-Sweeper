@@ -167,3 +167,23 @@ div {
         transform: scale(1) rotateZ(360deg)
     }
 }
+
+.self-mine {
+    width: 100%;
+}
+
+.self-mine-container {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.self-mine-number {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+}
