@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>Document</title>
+    <title>Mines Sweeper</title>
 </head>
 
 <body onload="initGame()">
+    <img class="header" src="img/Header.png" /></br>
+    </br>
     <label class="text">Your Time:</label>
     <label class="minutes">00</label>
     <label class="colon">:</label>
@@ -21,13 +23,24 @@
     </br>
     </br>
 
+    <div class="menu-container">
+        <button class="button2 back" onclick="back()">BACK</button>
+        <button class="button2 restart" onclick="initGame()">&#128512</button>
+        <button class="button2" onclick="changeSize(4)">Easy</button>
+        <button class="button2" onclick="changeSize(8)">Medium</button>
+        <button class="button2" onclick="changeSize(12)">Hard</button>
+        <div class="board-container"></div>
+
+    </div>
     <div class="hearts"></div>
-    <button class="button2 back" onclick="back()">BACK</button>
-    <button class="button2 restart" onclick="initGame()">&#128512</button>
-    <button class="button2" onclick="changeSize(4)">Easy</button>
-    <button class="button2" onclick="changeSize(8)">Medium</button>
-    <button class="button2" onclick="changeSize(12)">Hard</button>
-    <div class="board-container"></div>
+    <div class="lights"></div>
+    </br>
+    <div class="shield-container" onclick="exposeRandomCell()">
+        <img src="img/shield.png" class="shield">
+        <div class="shield-number">Safe!</div>
+        <div class="shield-text">Safe!</div>
+    </div>
+    <!-- <img src="img/shield.png" class="shield" onclick="exposeRandomCell()" /> -->
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
 </body>
