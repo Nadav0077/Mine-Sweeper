@@ -47,7 +47,7 @@ div {
 .board-container {
     position: fixed;
     top: 30%;
-    left: 35%;
+    left: 40%;
     backdrop-filter: blur(100px);
 }
 

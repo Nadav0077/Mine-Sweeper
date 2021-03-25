@@ -13,6 +13,7 @@ var HEART = '<img class="heart" src="img/heart.gif" />';
 var ONLIGHT = '<img class="heart" src="img/turnedOn.png" />';
 var OFFLIGHT = '<img class="heart" src="img/turnedOff.png" />';
 
+var gFlagCount;
 var gLights;
 var gBestTime;
 var gInter;
@@ -37,6 +38,7 @@ var gBoard = [];
 
 
 function initGame() {
+    gFlagCount = 0;
     clearInterval(gInter)
     gGame.secsPassed = 0;
     document.querySelector('.self-mine').classList.remove('shown')
@@ -45,9 +47,7 @@ function initGame() {
     gIsHint = false;
     gGame.isOn = true;
     document.querySelector('.restart').innerHTML = '&#128512';
-
     gBestTime = -Infinity;
-
     gGame.markedCount = 0;
     gGame.shownCount = 0;
     gHearts = (gLevel.MINES === 2) ? 2 : 3;
@@ -58,6 +58,7 @@ function initGame() {
         amount: gLevel.MINES,
         countAdded: 0
     }
+    updateUserCounters()
     document.querySelector('.self-mine-number').innerText = gSelfMine.amount - gSelfMine.countAdded;
     createHearts();
     gCountFirstClick = 0;
@@ -185,6 +186,7 @@ function cellClicked(elCell, i, j) {
             }
             gBoard[i][j].isShown = true;
         }
+        updateUserCounters()
         checkIfWin();
         gGamesArr.push({ board: copyMat(), lives: gHearts, game: clone(gGame) });
 
@@ -311,17 +313,22 @@ function renderCell(location, value) {
 function flagIt(i, j) {
     if (gGame.isOn) {
         if (!gBoard[i][j].isMarked) {
-            renderCell({ i: i, j: j }, FLAG)
-            gBoard[i][j].isMarked = true
-                // console.log(gBoard[i][j].isMine)
-            if (gBoard[i][j].isMine) gGame.markedCount++;
+            if (!gBoard[i][j].isShown || gBoard[i][j].isMine) {
+                gFlagCount++;
+                renderCell({ i: i, j: j }, FLAG)
+                gBoard[i][j].isMarked = true
+                    // console.log(gBoard[i][j].isMine)
+                if (gBoard[i][j].isMine) gGame.markedCount++;
+            }
         } else {
+            gFlagCount--;
             var lastFill = (!gBoard[i][j].isMine && gBoard[i][j].minesAroundCount > 0 && gBoard[i][j].isShown) ? gBoard[i][j].minesAroundCount : '';
             gBoard[i][j].isMarked = false
             if (gBoard[i][j].isMine && gBoard[i][j].isShown) lastFill = BOMB
             if (gBoard[i][j].isMine) gGame.markedCount--;
             renderCell({ i: i, j: j }, lastFill)
         }
+        updateUserCounters();
         checkIfWin();
     }
 }
@@ -546,4 +553,9 @@ function copyMat() {
 function addSelfMine() {
     gIsSelfMine = true;
     document.querySelector('.self-mine').classList.add('shown')
+}
+
+function updateUserCounters() {
+    document.querySelector('.flag-count').innerText = gFlagCount;
+    document.querySelector('.shown-count').innerText = gGame.shownCount;
 }
