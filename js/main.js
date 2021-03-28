@@ -90,10 +90,6 @@ function buildBoard() {
     return board;
 }
 
-function setMinesNegsCount(board) {
-
-}
-
 function renderBoard(board) {
 
     var strHTML = '<table border="0"><tbody>';
@@ -120,14 +116,12 @@ function renderBoard(board) {
 
 
 function cellClicked(elCell, i, j) {
-    // debugger
     if (gGame.isOn) {
         if (!gIsFirstClick) {
 
             if (!gIsSelfMine) {
                 for (var d = 0; d < gLevel.MINES; d++) {
                     var mine = addMine(i, j)
-                        // console.log(d)
                     gBoard[mine.i][mine.j].isMine = true;
                 }
                 countTime();
@@ -142,6 +136,10 @@ function cellClicked(elCell, i, j) {
                     if (!gBoard[i][j].isMine) {
                         gBoard[i][j].isMine = true;
                         gSelfMine.countAdded++;
+                        document.querySelector('.cell' + i + '-' + j).classList.add('shown')
+                        setTimeout(() => {
+                            document.querySelector('.cell' + i + '-' + j).classList.remove('shown')
+                        }, 500);
                         document.querySelector('.self-mine-number').innerText = gSelfMine.amount - gSelfMine.countAdded;
 
                     }
@@ -150,7 +148,6 @@ function cellClicked(elCell, i, j) {
             }
             addNumsToBoard();
             gCountFirstClick++;
-            // var tmpBoard = gBoard.slice()
             gGamesArr.push({ board: copyMat(), lives: gHearts, game: clone(gGame) });
         }
         if (gIsHint) {
@@ -193,12 +190,7 @@ function cellClicked(elCell, i, j) {
     }
 }
 
-function cellMarked(elCell) {
-
-}
-
 function expandShown(board, elCell, i, j) {
-    // debugger
     if (!gBoard[i][j].isMarked) {
         if (gBoard[i][j].isMine) {
             elCell.innerHTML = BOMB
@@ -214,7 +206,6 @@ function expandShown(board, elCell, i, j) {
                 board[i][j].isShown = true;
                 renderCell({ i: i, j: j }, '')
                 gGame.shownCount++;
-                // debugger
                 for (var d = i - 1; d <= i + 1; d++) {
                     if (d < 0 || d >= gLevel.SIZE) continue;
                     for (var c = j - 1; c <= j + 1; c++) {
@@ -224,23 +215,17 @@ function expandShown(board, elCell, i, j) {
                         if (!board[d][c].isShown) {
                             board[d][c].isShown = true;
                             if (board[d][c].minesAroundCount === 0 && !board[d][c].isShown) gGame.shownCount++;
-                            // console.log(d, c)
                             var value = (board[d][c].minesAroundCount > 0) ? board[d][c].minesAroundCount : '';
                             renderCell({ i: d, j: c }, value)
                             expandShown(board, document.querySelector('.cell' + d + '-' + c), d, c)
 
                         }
-                        // console.log(document.querySelector('.cell' + i + '-' + j))
-                        // if (i === 0 && j === 0) continue;
-
                     }
                 }
 
             }
         }
     }
-    // debugger
-    // console.log(gGame.shownCount)
 }
 
 function addMine(i, j) {
@@ -254,8 +239,6 @@ function addMine(i, j) {
         resetNums();
         IdxI = drawNum();
     }
-    // console.log({ i: IdxI, j: IdxJ })
-    // console.log(IdxI, IdxJ)
     return { i: IdxI, j: IdxJ }
 
 }
@@ -276,7 +259,6 @@ function drawNum() {
 }
 
 function countBombsAround(cellI, cellJ, mat) {
-    // debugger
     var bombsCount = 0;
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= gLevel.SIZE) continue;
@@ -317,7 +299,6 @@ function flagIt(i, j) {
                 gFlagCount++;
                 renderCell({ i: i, j: j }, FLAG)
                 gBoard[i][j].isMarked = true
-                    // console.log(gBoard[i][j].isMine)
                 if (gBoard[i][j].isMine) gGame.markedCount++;
             }
         } else {
@@ -381,28 +362,22 @@ function updateHeart(num) {
 }
 
 function back() {
-    if (gGamesArr.length > 0) { // console.log(gGamesArr)
-        // gGamesArr.pop()
+    debugger
+    if (gGamesArr.length > 0) {
         var lastGame = gGamesArr.pop()
-            // lastGame = lastGame[0];
-            // console.log(lastGame)
         gBoard = [];
         gBoard = lastGame.board;
         gHearts = lastGame.lives;
         gGame.isOn = lastGame.game.isOn;
         gGame.shownCount = lastGame.game.shownCount;
         gGame.markedCount = lastGame.game.markedCount;
-        // gGame.secsPassed = lastGame.secsPassed;
         createHearts();
         renderBoard();
     }
 }
 
 function checkIfWin() {
-    // console.log('test')
-    console.log(gGame.markedCount, gGame.shownCount)
     if (gGame.markedCount === gLevel.MINES && gGame.shownCount === gLevel.SIZE ** 2 - gLevel.MINES) {
-        // console.log('true')
         document.querySelector('.restart').innerHTML = '&#128526';
         switch (gLevel.SIZE) {
             case 4:
@@ -462,10 +437,7 @@ function showAllBombs() {
 }
 
 function checkBestTime(name) {
-    // console.log(localStorage.getItem(name))
-    // debugger
     if (gGame.secsPassed < localStorage.getItem(name)) {
-        // console.log(localStorage.getItem(name), 'test')
         localStorage.setItem(name, gGame.secsPassed);
         var minutesLabel = document.querySelector(".bestMinutes");
         var secondsLabel = document.querySelector(".bestSeconds");
@@ -526,8 +498,11 @@ function exposeRandomCell() {
             resetNums();
             IdxI = drawNum();
         }
-        document.querySelector('.cell' + IdxI + '-' + IdxJ).classList.add('shown')
-        setTimeout(() => { document.querySelector('.cell' + IdxI + '-' + IdxJ).classList.remove('shown') }, 3000)
+        var elCell = document.querySelector('.cell' + IdxI + '-' + IdxJ)
+        elCell.classList.add('shown');
+        setTimeout(() => {
+            if (!gBoard[IdxI][IdxJ].isShown) elCell.classList.remove('shown')
+        }, 3000)
         gSafeTimes--;
         document.querySelector('.shield-number').innerText = gSafeTimes
     }
